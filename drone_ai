@@ -1,0 +1,136 @@
+
+function int[] get_distance(pilons){
+         distance = new array[char:int]
+         for(pilon[i],i<pilon.size(),i++){
+            distance[i:i] = convert_to_meters(pilon[i].signal_strength); 
+         } 
+         return distance;
+}
+
+function int is_inbounds(distance[int]){
+         sort(distance);
+         a = distance[0];
+         c = distance[1];
+         b = sqroot(a^2 + b^2);
+         
+         area = a*b / 2  
+         c = 2*area / b
+         
+         if(c<1){ return false; }
+         else { return true; }
+}
+
+function collision(objects[int]){
+
+         for(objects[i],i<objects.size(),i++){
+            obj = objects[i];
+            dist = (obj.x - drone.x)^2 * (obj.y - drone.y)^2 
+            if(dist<1){
+               return i;
+            }
+         } 
+         return -1;
+}
+
+function detect_crash(hieght[int][int]){
+
+         if(hieght[drone.x][drone.y]<1){
+           return true;
+         }
+         return false;
+}
+
+function detect_stall(){
+
+         if(drone.height>drone.max_height){
+           return true;
+         }
+         return false;
+}
+
+
+function navigation(field[int]){
+
+         int CONST_OBJECTS = 0;
+         int CONST_PILONS = 1;
+         int CONST_AREA = 2;
+         int CONST_HEIGHT = 2;
+
+         int[] objects = field[CONST_OBJECTS];
+         int[] pilons = field[CONST_PILONS];
+         int[] area = field[CONST_AREA];
+         int[][] height = field[CONST_HEIGHT];
+         
+         int[] distance = new int[];
+         
+         while(1){
+         
+              //detect_out_of_obounds 
+              distance = get_distance(pilons); 
+              if(is_inbounds(pilons)){
+              
+                raise_warning.out_of_bounds();
+              
+                if(drone.x < 1){ x = 1; }
+                if(drone.y < 1){ y = 1; }
+                
+                if(drone.x > area.x_high_point){ x = -1; }
+                if(drone.Y > area.y_high_point){ y = -1; }
+                
+                drone.move(x,y);
+              }
+              
+              
+              //detect_collision
+              obj_collision = collision(objects);
+              if(obj_collision>0){
+                
+                raise_warning.collision(obj_collision);
+                obj = objects[obj_collision];
+                               
+                //southwest
+                if((drone.x < obj.x)&&(drone.y < obj.y)){ 
+                  x = -1; 
+                  y = 1; 
+                }
+                
+                //northwest
+                if((drone.x < obj.x)&&(drone.y > obj.y)){ 
+                  x = -1; 
+                  y = -1; 
+                }
+
+                //northeast
+                if((drone.x < obj.x)&&(drone.y > obj.y)){ 
+                  x = 1; 
+                  y = -1; 
+                }
+
+                //southeast
+                if((drone.x < obj.x)&&(drone.y > obj.y)){ 
+                  x = 1; 
+                  y = 1; 
+                }
+                
+                drone.move(x,y);              
+              }//collision
+              
+              
+              //detect crash
+              if(detect_crash(height)){
+                raise_warning.crash();
+                drone.rise();               
+              }//detect crash
+
+              
+              //detect stall
+              if(detect_stall()){
+                raise_warning.stall();
+                drone.descend();               
+              }//detect stall
+              
+              
+         }
+         
+}
+

@@ -139,7 +139,12 @@ function get_tbl_list_json($tbls_url){}
 
 function get_tbl_indx_json($tbl_indx_url){}
 
-function read_rec_json($rec_url){}
+function read_rec_json($sql,$conn){
+         $rs = get_rs($sql,$conn);
+while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {
+                   printf ("ID: %s  Name: %s", $row[0], $row["name"]);
+}
+}
 
 function write_rec_json($json,$tbl){
 
