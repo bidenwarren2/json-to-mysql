@@ -80,8 +80,21 @@ function read_content($file_uri,$file_content){
 }
 
 
-//store json files
-function get_tbls($conn){}
+//json records
+//for each table
+//get table and records
+//for each table
+//write id,json,hash
+//write json
+//add to table index
+//write index to file
+//write to index list
+//for each table
+//
+function get_tbls($conn){
+         
+          
+}
 
 function write_tbls_2_json($folder,$conn){
 
@@ -121,14 +134,27 @@ function write_tbl_indx_2_json($folder,$tbl){}
 
 
 
-//read json files
+//json functions
 function get_tbl_list_json($tbls_url){}
 
 function get_tbl_indx_json($tbl_indx_url){}
 
-function get_tbl_rec_json($rec_url){}
+function read_rec_json($rec_url){}
 
-function store_json_to_db($json){}
+function write_rec_json($json,$tbl){
+
+         //insert json
+         $rec = json_decode($json, true);
+         
+         $columns = implode(", ",array_keys($insData));
+         $escaped_values = array_map('mysql_real_escape_string', array_values($insData));
+         $values  = implode(", ", $escaped_values);
+         
+         $sql = "INSERT INTO $tbl ($columns) VALUES ($values)";
+         if(!execute($sql)){
+             echo "error inserting $json";   
+         }
+}
 
 
 ?>
