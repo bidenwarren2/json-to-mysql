@@ -6,7 +6,6 @@
 
 include("config.php");
 include("include.classloader.php");
-include("functions.php");
 
 $classLoader->addToClasspath(ROOT);
 

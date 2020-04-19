@@ -67,16 +67,12 @@ function execute($sql){
 //file management
 function write_content($file_uri,$file_content){
 	//open file for writing
-	if(file_exists){
-	   file_put_contents($file_uri,$file_content);
-	}	
+	file_put_contents($file_uri,$file_content);
 }
 
 function read_content($file_uri,$file_content){
 	//open file for reading
-	if(file_exists){
-           return file_get_contents($file_uri);
-        }   
+	return file_get_contents($file_uri);
 }
 
 
